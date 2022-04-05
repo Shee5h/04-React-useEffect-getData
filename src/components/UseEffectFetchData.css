@@ -1,0 +1,10 @@
+.borderConfig{
+    border: black solid 1px;
+}
+
+.spacing{
+    width: 500px;
+    margin: 10px 5px ;
+    padding: 0px 7px;
+}
+
