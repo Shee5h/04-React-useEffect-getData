@@ -1,69 +1,46 @@
 import React, {useState, useEffect} from 'react';
+import CommentCard from './CommentCard';
 import './UseEffectFetchData.css';
-
-const url = 'https://jsonplaceholder.typicode.com/comments';
+import UserCard from './UserCard';
 
 const UseEffectFetchData = () => {
-const [comments, setComments] = useState([]);
-
-const getComments = async () => {
-    const responce = await fetch(url);
-    const comments = await responce.json();
-    setComments(comments);
-    console.log(comments);
-};
+const [stuff, setStuff] = useState([]);
+let [type, setType] = useState('comments');
 
     useEffect(() => {
-        getComments();
-    }, []);
 
-    const [visible, setVisibility] = useState(false);
+        const getData = async () => {
+            const responce = await fetch(`https://jsonplaceholder.typicode.com${type}`);
+            const stuff = await responce.json();
+            setStuff(stuff);
+            console.log(stuff);
+        };
+        getData();
 
-    function changeVisibility(){
-        setVisibility(!visible);
-    }
+    }, [type]);
 
-    // let number = 1;
-    // function update(){
-    //     let select = document.getElementById('postOptions');
-    //     let option = select.options[select.selectedIndex];
-    //     let index = option.value;
-    //     console.log(index)
+    useEffect(() => {
+        console.log(type);
+    }, [type])
+
+    // renderSwitch({type}){
+    //     switch({type}){
+    //         case '/users':
+    //         return <p>{stuff.map(user => <UserCard key={user.id} name={user.name} username={user.username} email={user.email}/>)}</p>;
+    //     }
     // }
-
     
     return(
         <div>
-            <button type='button' onClick={changeVisibility}>{visible? 'Hide ALL comments' : 'Show ALL comments'}</button>
-            <p style={{display: visible? 'contents' : 'none'}}>
-                {comments.map(item => (
-                <div className='borderConfig spacing'>
-                    <p><b>Post ID: </b>{item.postId}</p>
-                    <p><b>ID: </b>{item.id}</p>
-                    <p>Name: {item.name}</p>
-                    <p>Email: {item.email}</p>
-                    <p>Body: {item.body}</p>
-                </div>
-            ))}</p>
+            <h3>{type}</h3>
+            <button type='button' onClick={() => {setType('/posts')}}>Posts</button>
+            <button type='button' onClick={() => {setType('/comments')}}>Comments</button>
+            <button type='button' onClick={() => {setType('/albums')}}>Albums</button>
+            <button type='button' onClick={() => {setType('/photos')}}>Photos</button>
+            <button type='button' onClick={() => {setType('/todos')}}>ToDo's</button>
+            <button type='button' onClick={() => {setType('/users')}}>Users</button>
 
-            {/* <p style={{display: visible? 'contents' : 'none'}}>
-                {comments.map(item => {
-                    return(item.postId === 1) ?
-                <div className='borderConfig spacing'>
-                    <p><b>Post ID: </b>{item.postId}</p>
-                    <p><b>ID: </b>{item.id}</p>
-                    <p>Name: {item.name}</p>
-                    <p>Email: {item.email}</p>
-                    <p>Body: {item.body}</p>
-                </div>
-            :null })}</p> */}
-
-            {/* <div>
-                <select id='postOptions'  onChange={update}>
-                    <option value={1}>Post ID - 1</option>
-                    <option value={2}>Post ID - 2</option>
-                </select>
-            </div> */}
+            <p>{stuff.map(item => (JSON.stringify(item)))}</p>
             
         </div>
     );
